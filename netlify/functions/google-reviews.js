@@ -77,8 +77,10 @@ exports.handler = async (event) => {
     }
 
     const rawReviews = Array.isArray(payload.result.reviews) ? payload.result.reviews : [];
+    const limitParam = Number(qs.get("limit"));
+    const limit = Number.isFinite(limitParam) && limitParam > 0 ? limitParam : rawReviews.length;
     const reviews = rawReviews
-      .slice(0, defaultLimit)
+      .slice(0, limit)
       .map(({ author_name, rating, text, relative_time_description, time, profile_photo_url }) => ({
         author_name,
         rating,

@@ -95,7 +95,7 @@ Add these to your widget `<div>`:
 
 | Attribute | Values | Default | Description |
 |-----------|--------|---------|-------------|
-| `data-endpoint` | URL | (required) | Netlify Function endpoint |
+| `data-endpoint` | URL | (required) | Backend endpoint URL |
 | `data-layout` | `carousel`, `grid` | `carousel` | Display layout |
 | `data-mode` | `dark`, `light` | `light` | Theme mode |
 | `data-max` | number | `10` | Max reviews to display |
@@ -112,7 +112,7 @@ Set these in your Netlify site settings:
 | `PLACE_ID` | ✅ Yes | — | Google Place ID for your business |
 | `REVIEWS_LANGUAGE` | ❌ Optional | `en` | Language code (overridden by `data-locale` if set) |
 
-**Note:** Review limit is controlled by the `data-max` attribute in the frontend widget, not by backend environment variables.
+**Note:** The backend returns all available reviews from Google Places. Apply display limits and filters client-side using `data-max` and `data-min-rating` (the backend does not enforce a limit).
 
 ## 🎨 Theming
 
