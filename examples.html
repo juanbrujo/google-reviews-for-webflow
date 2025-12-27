@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Reviews Widget - API Examples</title>
+  <link rel="stylesheet" href="assets/css/google-reviews-widget.css">
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+      background: #0a0a0a;
+      color: #fff;
+    }
+    
+    h1 { margin-bottom: 0.5rem; }
+    p { color: #888; margin-bottom: 2rem; }
+    
+    .example {
+      margin-bottom: 3rem;
+      padding: 1.5rem;
+      background: #111;
+      border-radius: 8px;
+      border: 1px solid #222;
+    }
+    
+    .example h2 {
+      margin-top: 0;
+      color: #00d4ff;
+      font-size: 1.25rem;
+    }
+    
+    .example code {
+      display: block;
+      background: #0a0a0a;
+      padding: 1rem;
+      border-radius: 4px;
+      margin: 1rem 0;
+      overflow-x: auto;
+      font-size: 0.875rem;
+      border: 1px solid #333;
+    }
+    
+    .controls {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+    
+    button {
+      padding: 0.5rem 1rem;
+      background: #00d4ff;
+      color: #000;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    
+    button:hover {
+      background: #00b8e6;
+      transform: translateY(-2px);
+    }
+    
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .widget-container {
+      min-height: 300px;
+    }
+    
+    .log {
+      background: #0a0a0a;
+      border: 1px solid #333;
+      padding: 1rem;
+      border-radius: 4px;
+      max-height: 200px;
+      overflow-y: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 0.75rem;
+      margin-top: 1rem;
+    }
+    
+    .log-entry {
+      margin: 0.25rem 0;
+      color: #888;
+    }
+    
+    .log-entry.success { color: #00ff88; }
+    .log-entry.error { color: #ff4444; }
+    .log-entry.info { color: #00d4ff; }
+  </style>
+</head>
+<body>
+  <h1>Google Reviews Widget - API Examples</h1>
+  <p>Interactive demonstrations of the widget's JavaScript API</p>
+
+  <!-- Example 1: Basic Auto-Init -->
+  <div class="example">
+    <h2>Example 1: Auto-Initialization</h2>
+    <code>
+&lt;div id="google-reviews-widget"
+     data-endpoint="/.netlify/functions/google-reviews"
+     data-layout="carousel"
+     data-mode="dark"&gt;
+&lt;/div&gt;
+    </code>
+    <div class="widget-container">
+      <div id="example-1"
+           data-endpoint="/.netlify/functions/google-reviews"
+           data-layout="carousel"
+           data-mode="dark"
+           data-max="5"
+           data-min-rating="4">
+      </div>
+    </div>
+  </div>
+
+  <!-- Example 2: Manual Init with Callbacks -->
+  <div class="example">
+    <h2>Example 2: Manual Initialization with Callbacks</h2>
+    <code>
+const widget = GoogleReviewsWidget.init('#example-2', {
+  endpoint: '/.netlify/functions/google-reviews',
+  layout: 'carousel',
+  mode: 'dark',
+  beforeInit: (instance) => log('beforeInit called'),
+  created: (instance) => log('created called')
+});
+    </code>
+    <div class="controls">
+      <button onclick="initExample2()">Initialize Widget</button>
+    </div>
+    <div class="widget-container">
+      <div id="example-2" data-auto-init="false"></div>
+    </div>
+    <div id="log-2" class="log"></div>
+  </div>
+
+  <!-- Example 3: Dynamic Updates -->
+  <div class="example">
+    <h2>Example 3: Dynamic Updates</h2>
+    <code>
+widget.update({ minRating: 5, max: 3 });
+widget.update({ layout: 'grid' });
+    </code>
+    <div class="controls">
+      <button onclick="updateRating5()">Show Only 5-Star</button>
+      <button onclick="updateRatingAll()">Show All Ratings</button>
+      <button onclick="toggleLayout()">Toggle Layout</button>
+      <button onclick="updateMax3()">Show Max 3</button>
+      <button onclick="updateMax10()">Show Max 10</button>
+    </div>
+    <div class="widget-container">
+      <div id="example-3" data-auto-init="false"></div>
+    </div>
+    <div id="log-3" class="log"></div>
+  </div>
+
+  <!-- Example 4: Theme Switching -->
+  <div class="example">
+    <h2>Example 4: Theme Switching</h2>
+    <code>
+widget.update({ mode: 'light' });
+    </code>
+    <div class="controls">
+      <button onclick="setThemeDark()">Dark Theme</button>
+      <button onclick="setThemeLight()">Light Theme</button>
+    </div>
+    <div class="widget-container">
+      <div id="example-4" data-auto-init="false"></div>
+    </div>
+  </div>
+
+  <!-- Example 5: Destroy and Recreate -->
+  <div class="example">
+    <h2>Example 5: Destroy and Recreate</h2>
+    <code>
+widget.destroy();
+// Later...
+const newWidget = GoogleReviewsWidget.init('#example-5', options);
+    </code>
+    <div class="controls">
+      <button id="destroy-btn" onclick="destroyWidget()">Destroy Widget</button>
+      <button id="recreate-btn" onclick="recreateWidget()" disabled>Recreate Widget</button>
+    </div>
+    <div class="widget-container">
+      <div id="example-5" data-auto-init="false"></div>
+    </div>
+    <div id="log-5" class="log"></div>
+  </div>
+
+  <!-- Example 6: Multi-Location -->
+  <div class="example">
+    <h2>Example 6: Multi-Location (Place ID Switching)</h2>
+    <code>
+widget.update({ placeId: 'ChIJ...newLocation' });
+    </code>
+    <p style="color: #888; font-size: 0.875rem;">
+      Note: This demo uses sample data. In production, different Place IDs would fetch different locations.
+    </p>
+    <div class="controls">
+      <button onclick="switchLocation('location1')">Location 1</button>
+      <button onclick="switchLocation('location2')">Location 2</button>
+      <button onclick="switchLocation('location3')">Location 3</button>
+    </div>
+    <div class="widget-container">
+      <div id="example-6" data-auto-init="false"></div>
+    </div>
+    <div id="log-6" class="log"></div>
+  </div>
+
+  <script src="assets/js/google-reviews-widget.js"></script>
+  <script>
+    // Utility to log messages
+    function log(message, type = 'info', containerId = 'log-2') {
+      const logContainer = document.getElementById(containerId);
+      if (!logContainer) return;
+      
+      const entry = document.createElement('div');
+      entry.className = `log-entry ${type}`;
+      entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+      logContainer.appendChild(entry);
+      logContainer.scrollTop = logContainer.scrollHeight;
+    }
+
+    // Example 2: Manual Init
+    let widget2;
+    function initExample2() {
+      log('Initializing widget...', 'info', 'log-2');
+      widget2 = GoogleReviewsWidget.init('#example-2', {
+        endpoint: '/.netlify/functions/google-reviews',
+        layout: 'carousel',
+        mode: 'dark',
+        max: 6,
+        minRating: 4,
+        beforeInit: (instance) => {
+          log('beforeInit callback fired', 'success', 'log-2');
+          log(`Options: ${JSON.stringify(instance.getOptions())}`, 'info', 'log-2');
+        },
+        created: (instance) => {
+          log('created callback fired', 'success', 'log-2');
+          log('Widget is ready!', 'success', 'log-2');
+        }
+      });
+    }
+
+    // Example 3: Updates
+    let widget3 = GoogleReviewsWidget.init('#example-3', {
+      endpoint: '/.netlify/functions/google-reviews',
+      layout: 'carousel',
+      mode: 'dark',
+      max: 10,
+      minRating: 0,
+      created: (instance) => {
+        log('Widget initialized', 'success', 'log-3');
+      }
+    });
+
+    function updateRating5() {
+      widget3.update({ minRating: 5 });
+      log('Updated: minRating = 5', 'info', 'log-3');
+    }
+
+    function updateRatingAll() {
+      widget3.update({ minRating: 0 });
+      log('Updated: minRating = 0 (show all)', 'info', 'log-3');
+    }
+
+    function toggleLayout() {
+      const current = widget3.getOptions().layout;
+      const newLayout = current === 'carousel' ? 'grid' : 'carousel';
+      widget3.update({ layout: newLayout });
+      log(`Updated: layout = ${newLayout}`, 'info', 'log-3');
+    }
+
+    function updateMax3() {
+      widget3.update({ max: 3 });
+      log('Updated: max = 3', 'info', 'log-3');
+    }
+
+    function updateMax10() {
+      widget3.update({ max: 10 });
+      log('Updated: max = 10', 'info', 'log-3');
+    }
+
+    // Example 4: Theme
+    let widget4 = GoogleReviewsWidget.init('#example-4', {
+      endpoint: '/.netlify/functions/google-reviews',
+      layout: 'carousel',
+      mode: 'dark',
+      max: 5
+    });
+
+    function setThemeDark() {
+      const el = document.getElementById('example-4');
+      el.classList.remove('grw-light');
+      el.classList.add('grw-dark');
+      widget4.update({ mode: 'dark' });
+    }
+
+    function setThemeLight() {
+      const el = document.getElementById('example-4');
+      el.classList.remove('grw-dark');
+      el.classList.add('grw-light');
+      widget4.update({ mode: 'light' });
+    }
+
+    // Example 5: Destroy/Recreate
+    let widget5 = GoogleReviewsWidget.init('#example-5', {
+      endpoint: '/.netlify/functions/google-reviews',
+      layout: 'carousel',
+      mode: 'dark',
+      max: 5,
+      created: () => {
+        log('Widget created', 'success', 'log-5');
+      }
+    });
+
+    function destroyWidget() {
+      widget5.destroy();
+      log('Widget destroyed', 'error', 'log-5');
+      document.getElementById('destroy-btn').disabled = true;
+      document.getElementById('recreate-btn').disabled = false;
+    }
+
+    function recreateWidget() {
+      widget5 = GoogleReviewsWidget.init('#example-5', {
+        endpoint: '/.netlify/functions/google-reviews',
+        layout: 'grid',
+        mode: 'dark',
+        max: 4,
+        created: () => {
+          log('Widget recreated with grid layout', 'success', 'log-5');
+        }
+      });
+      document.getElementById('destroy-btn').disabled = false;
+      document.getElementById('recreate-btn').disabled = true;
+    }
+
+    // Example 6: Multi-location
+    let widget6 = GoogleReviewsWidget.init('#example-6', {
+      endpoint: '/.netlify/functions/google-reviews',
+      layout: 'carousel',
+      mode: 'dark',
+      max: 8,
+      placeId: '',
+      created: () => {
+        log('Location loaded', 'success', 'log-6');
+      }
+    });
+
+    const locations = {
+      location1: 'ChIJ_EXAMPLE_PLACE_ID_1',
+      location2: 'ChIJ_EXAMPLE_PLACE_ID_2',
+      location3: 'ChIJ_EXAMPLE_PLACE_ID_3'
+    };
+
+    function switchLocation(loc) {
+      const placeId = locations[loc];
+      widget6.update({ placeId });
+      log(`Switched to ${loc} (${placeId})`, 'info', 'log-6');
+      log('Note: Demo uses sample data, actual API would fetch different reviews', 'info', 'log-6');
+    }
+  </script>
+</body>
+</html>

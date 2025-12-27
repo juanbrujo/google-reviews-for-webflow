@@ -3,7 +3,7 @@
  * Zero dependencies, framework-agnostic, works anywhere.
  * https://github.com/juanbrujo/google-reviews-for-webflow
  * 
- * Usage:
+ * Usage (Auto-init):
  * <div id="google-reviews-widget"
  *      data-endpoint="/.netlify/functions/google-reviews"
  *      data-layout="carousel"
@@ -15,9 +15,23 @@
  * </div>
  * <link rel="stylesheet" href="google-reviews-widget.css">
  * <script src="google-reviews-widget.js" defer></script>
+ * 
+ * Usage (Manual):
+ * const widget = GoogleReviewsWidget.init('#my-widget', {
+ *   endpoint: '/.netlify/functions/google-reviews',
+ *   layout: 'carousel',
+ *   mode: 'dark',
+ *   beforeInit: (instance) => console.log('Before init', instance),
+ *   created: (instance) => console.log('Created', instance)
+ * });
+ * 
+ * widget.update({ max: 5, minRating: 5 });
+ * widget.destroy();
  */
 
 (() => {
+  // Widget instances registry
+  const instances = new Map();
   // Sample data fallback
   const sample = {
     place: {
@@ -244,8 +258,8 @@
   };
 
   // Main render function
-  const render = (root) => {
-    const opts = getOptions(root);
+  const render = (root, instance) => {
+    const opts = instance ? instance.options : getOptions(root);
     const setLoading = (msg) => (root.innerHTML = `<div class="loading">${msg}</div>`);
 
     setLoading("Loading reviews...");
@@ -264,6 +278,11 @@
         // Remove data-* attributes after successful render
         removeDataAttrs(root);
         
+        // Call created callback
+        if (instance && instance.options.created) {
+          instance.options.created(instance);
+        }
+        
         return result;
       })
       .catch(() => {
@@ -272,24 +291,160 @@
         
         // Remove data-* attributes even on fallback (sample data loaded successfully)
         removeDataAttrs(root);
+        
+        // Call created callback even on fallback
+        if (instance && instance.options.created) {
+          instance.options.created(instance);
+        }
       });
   };
 
-  // Initialize widget
+  // Widget Instance Class
+  class GoogleReviewsWidgetInstance {
+    constructor(element, options = {}) {
+      this.element = typeof element === 'string' ? $(element) : element;
+      if (!this.element) {
+        throw new Error(`Widget element not found: ${element}`);
+      }
+      
+      // Merge data-* attributes with passed options (options take precedence)
+      const dataOpts = getOptions(this.element);
+      this.options = {
+        endpoint: options.endpoint || dataOpts.endpoint,
+        placeId: options.placeId || dataOpts.placeId || "",
+        layout: options.layout || dataOpts.layout || "carousel",
+        mode: options.mode || this.element.dataset.mode || "dark",
+        max: options.max !== undefined ? options.max : dataOpts.max,
+        minRating: options.minRating !== undefined ? options.minRating : dataOpts.minRating,
+        autoplay: options.autoplay !== undefined ? options.autoplay : dataOpts.autoplay,
+        locale: options.locale || dataOpts.locale || "en",
+        // Callbacks
+        beforeInit: options.beforeInit || null,
+        created: options.created || null,
+      };
+      
+      this.isInitialized = false;
+      this.isDestroyed = false;
+    }
+
+    // Initialize the widget
+    init() {
+      if (this.isDestroyed) {
+        throw new Error('Cannot init a destroyed widget instance');
+      }
+      
+      if (this.isInitialized) {
+        console.warn('Widget already initialized');
+        return this;
+      }
+
+      // beforeInit callback
+      if (this.options.beforeInit) {
+        this.options.beforeInit(this);
+      }
+
+      // Add theme classes
+      this.element.classList.add("grw-widget", `grw-${this.options.mode}`);
+      
+      // Render
+      render(this.element, this);
+      
+      this.isInitialized = true;
+      instances.set(this.element, this);
+      
+      return this;
+    }
+
+    // Update widget options and re-render
+    update(newOptions = {}) {
+      if (this.isDestroyed) {
+        throw new Error('Cannot update a destroyed widget instance');
+      }
+      
+      if (!this.isInitialized) {
+        throw new Error('Widget must be initialized before updating');
+      }
+
+      // Merge new options
+      Object.assign(this.options, newOptions);
+      
+      // Re-render
+      render(this.element, this);
+      
+      return this;
+    }
+
+    // Destroy widget instance
+    destroy() {
+      if (this.isDestroyed) {
+        console.warn('Widget already destroyed');
+        return;
+      }
+
+      // Clear content
+      this.element.innerHTML = '';
+      
+      // Remove classes
+      this.element.classList.remove("grw-widget", `grw-${this.options.mode}`);
+      
+      // Remove from registry
+      instances.delete(this.element);
+      
+      this.isDestroyed = true;
+      this.isInitialized = false;
+      
+      return null;
+    }
+
+    // Get current options
+    getOptions() {
+      return { ...this.options };
+    }
+  }
+
+  // Legacy initWidget for backward compatibility
   const initWidget = (root) => {
     const mode = root.dataset.mode || "dark";
     root.classList.add("grw-widget", `grw-${mode}`);
     render(root);
   };
 
-  // Auto-initialize on DOMContentLoaded
+  // Auto-initialize on DOMContentLoaded (only if data-auto-init is not false)
   document.addEventListener("DOMContentLoaded", () => {
     const widget = $("#google-reviews-widget");
-    if (widget) initWidget(widget);
+    if (widget && widget.dataset.autoInit !== 'false') {
+      initWidget(widget);
+    }
   });
 
-  // Export for manual initialization (optional)
+  // Public API
   if (typeof window !== 'undefined') {
-    window.GoogleReviewsWidget = { initWidget, render };
+    window.GoogleReviewsWidget = {
+      // Create and initialize new instance
+      init: (element, options = {}) => {
+        const instance = new GoogleReviewsWidgetInstance(element, options);
+        return instance.init();
+      },
+      
+      // Create instance without initializing
+      create: (element, options = {}) => {
+        return new GoogleReviewsWidgetInstance(element, options);
+      },
+      
+      // Get existing instance
+      getInstance: (element) => {
+        const el = typeof element === 'string' ? $(element) : element;
+        return instances.get(el) || null;
+      },
+      
+      // Destroy all instances
+      destroyAll: () => {
+        instances.forEach(instance => instance.destroy());
+      },
+      
+      // Legacy support
+      initWidget,
+      render,
+    };
   }
 })();

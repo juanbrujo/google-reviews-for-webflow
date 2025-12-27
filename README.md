@@ -10,7 +10,7 @@ Add authentic customer reviews from Google to your Webflow website with our ligh
 [![Tests](https://img.shields.io/badge/Tests-49%20passing-success)](TESTING.md)
 [![API Coverage](https://img.shields.io/badge/API%20Coverage-100%25-brightgreen)](TESTING.md)
 
-**🔗 [Live Demo](https://google-reviews-for-webflow.netlify.app/) | 🖼️ [Open Graph Image](https://google-reviews-for-webflow.netlify.app/assets/img/og-image.png) | 📖 [Documentation](#-quick-start) | 🏗️ [Architecture](ARCHITECTURE.md) | 🐛 [Report Issue](#-support)**
+**🔗 [Live Demo](https://google-reviews-for-webflow.netlify.app/)
 
 ---
 
@@ -28,7 +28,7 @@ Add authentic customer reviews from Google to your Webflow website with our ligh
 - **Fallback Data**: Sample reviews included for local development without API keys
 - **Zero Dependencies**: No npm packages required; deploys instantly to Netlify
 
-> 📊 **SEO Details**: Each review card includes Schema.org Review markup with author, rating, date, and body. The place header includes LocalBusiness and AggregateRating schemas. See [SEO.md](SEO.md) for complete documentation.
+> 📊 **SEO Details**: Each review card includes Schema.org Review markup with author, rating, date, and body. The place header includes LocalBusiness and AggregateRating schemas.
 
 ### 🔎 SEO Features
 - Review microdata on each card (`Review`, `Rating`, `datePublished`, `reviewBody`)
@@ -43,7 +43,7 @@ Add authentic customer reviews from Google to your Webflow website with our ligh
 1. Go to [Google Cloud Console](https://console.cloud.google.com/)
 2. Create a new project and enable **Places API**
 3. Create an **API Key** (restrict to places API for security)
-4. Find your **Place ID** using [Places API Explorer](https://developers.google.com/maps/documentation/places/web-service/overview)
+4. Find your **Place ID** using [Places API Explorer](https://developers.google.com/maps/documentation/places/web-service/overview) and [Place ID Finder](https://developers.google.com/maps/documentation/javascript/examples/places-placeid-finder)
 
 ### 2. Deploy to Netlify
 1. Push this repo to GitHub
@@ -78,7 +78,6 @@ Replace `<your-site>` with your actual Netlify domain.
 ├── index.html                           # Landing page & demo with theme toggle
 ├── README.md                            # This file
 ├── LICENSE                              # MIT license
-├── SEO.md                               # SEO implementation guide
 ├── netlify.toml                         # Netlify configuration
 ├── .env.example                         # Environment variable template
 ├── AGENTS.md                            # Contribution roles
@@ -98,6 +97,57 @@ Replace `<your-site>` with your actual Netlify domain.
 ```
 
 ## ⚙️ Configuration
+
+### Widget Initialization
+
+#### Auto-Initialization (Default)
+The widget automatically initializes on `DOMContentLoaded`:
+
+```html
+<div id="google-reviews-widget"
+     data-endpoint="/.netlify/functions/google-reviews"
+     data-layout="carousel"
+     data-mode="dark">
+</div>
+```
+
+To disable auto-init:
+```html
+<div id="google-reviews-widget" data-auto-init="false"></div>
+```
+
+#### Manual Initialization with Callbacks
+Use the JavaScript API for advanced control:
+
+```javascript
+const widget = GoogleReviewsWidget.init('#google-reviews-widget', {
+  endpoint: '/.netlify/functions/google-reviews',
+  layout: 'carousel',
+  mode: 'dark',
+  max: 10,
+  minRating: 4,
+  
+  // Callback before initialization
+  beforeInit: (instance) => {
+    console.log('Widget initializing...');
+  },
+  
+  // Callback after reviews loaded
+  created: (instance) => {
+    console.log('Widget ready!');
+  }
+});
+
+// Update widget dynamically
+widget.update({ minRating: 5, max: 5 });
+
+// Destroy widget
+widget.destroy();
+```
+
+📖 **[Complete API Documentation](docs/API.md)** - Learn about all methods, callbacks, and advanced usage
+
+### Data Attributes
 
 ### Data Attributes (HTML)
 Add these to your widget `<div>`:
@@ -186,8 +236,6 @@ npm run test:coverage
 - ✅ **API: 100%** coverage (statements, functions, branches)
 - ✅ Widget: Core logic validated (IIFE architecture)
 
-See [TESTING.md](TESTING.md) for complete testing documentation.
-
 ## 🔒 Security
 
 - **API Key Protection**: Your Google API Key is never exposed to the client. All requests go through the Netlify Function backend.
@@ -242,25 +290,3 @@ MIT License - see [LICENSE](LICENSE) file for details.
 **Copyright (c) 2025 Google Reviews for Webflow Contributors**
 
 This project is open source and free to use, modify, and distribute under the MIT license terms.
-
-## 🐛 Troubleshooting
-
-**Widget not showing?**
-- Check that `data-endpoint` is correct and accessible
-- Open browser console for errors
-- Verify Netlify Function is deployed: visit `/.netlify/functions/google-reviews` in your browser
-
-**Images not loading?**
-- Profile photos require CORS. If they fail, initials are shown as fallback
-- Check Google Places API is enabled in Cloud Console
-
-**Styling issues in Webflow?**
-- Import `google-reviews-widget.css` only (not `styles.css`, which is for the landing page)
-- The widget is scoped to `.grw-widget` class, so it won't conflict with Webflow styles
-
-## 📞 Support
-
-For issues, feature requests, or questions:
-1. Check [GitHub Issues](https://github.com/)
-2. Review [AGENTS.md](AGENTS.md) for contribution process
-3. Test with sample data first (no API key needed)

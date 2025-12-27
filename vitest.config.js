@@ -3,6 +3,12 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig({
   test: {
     environment: 'happy-dom',
+    exclude: [
+      'node_modules/**',
+      '.netlify/**',
+      'coverage/**',
+      'dist/**',
+    ],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html', 'lcov'],
@@ -12,6 +18,8 @@ export default defineConfig({
       ],
       exclude: [
         'node_modules/**',
+        '.netlify/**',
+        'coverage/**',
         'assets/js/functions.js',
         '**/*.test.js',
         '**/*.spec.js',
