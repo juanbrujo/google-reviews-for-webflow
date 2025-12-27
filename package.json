@@ -1,6 +1,6 @@
 {
   "name": "google-reviews-for-webflow",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Free, open-source widget to embed Google Reviews in Webflow CMS sites",
   "private": true,
   "main": "assets/js/main.js",

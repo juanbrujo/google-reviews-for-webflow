@@ -94,6 +94,7 @@
   height: var(--grw-card-height);
   grid-template-rows: auto 1fr;
   transition: transform 150ms ease, box-shadow 150ms ease;
+  width: 100%;
 }
 
 .grw-widget .review-card:hover {
@@ -238,20 +239,52 @@
   .grw-widget .carousel-track > div {
     flex-basis: calc((100% - calc(var(--grw-space) * 2)) / 2);
   }
+
+  /* Mantener reglas de data-count en tablet */
+  .grw-widget .carousel-track[data-count="1"] > div {
+    flex-basis: 100%;
+  }
+
+  .grw-widget .carousel-track[data-count="2"] > div {
+    flex-basis: calc((100% - calc(var(--grw-space) * 2)) / 2);
+  }
 }
 
 /* Responsive: Mobile */
 @media (max-width: 640px) {
   .grw-widget .carousel {
-    padding: 0 calc(var(--grw-space) * 4);
+    padding: 0 calc(var(--grw-space) * 5);
+  }
+
+  .grw-widget .carousel-track {
+    padding: calc(var(--grw-space) * 1);
   }
 
   .grw-widget .carousel-track > div {
-    flex-basis: 100%;
+    flex: 0 0 100%;
     min-width: 0;
   }
 
+  /* 1 review: 100% ancho */
+  .grw-widget .carousel-track[data-count="1"] > div {
+    flex-basis: 100%;
+  }
+
+  /* 2 reviews: 50% cada uno */
+  .grw-widget .carousel-track[data-count="2"] > div {
+    flex-basis: calc(50% - calc(var(--grw-space) * 1));
+  }
+
   .grw-widget .carousel-btn {
-    padding: calc(var(--grw-space) * 1) calc(var(--grw-space) * 1);
+    padding: calc(var(--grw-space) * 1);
+    font-size: 0.875rem;
+  }
+
+  .grw-widget .carousel-btn.prev {
+    left: calc(var(--grw-space) * 0.5);
+  }
+
+  .grw-widget .carousel-btn.next {
+    right: calc(var(--grw-space) * 0.5);
   }
 }
