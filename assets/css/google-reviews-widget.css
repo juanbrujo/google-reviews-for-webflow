@@ -88,7 +88,7 @@
 
 .grw-widget .review-card:hover {
   transform: translateY(calc(-0.5 * var(--grw-space)));
-  box-shadow: 0 calc(var(--grw-space) * 2) calc(var(--grw-space) * 4) rgba(0, 0, 0, 0.15);
+  box-shadow: 0 var(--grw-space) calc(var(--grw-space) * 1.5) rgba(0, 0, 0, 0.15);
 }
 
 /* Review Header */
