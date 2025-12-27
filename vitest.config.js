@@ -3,6 +3,7 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig({
   test: {
     environment: 'happy-dom',
+    include: ['__tests__/**/*.test.js'],
     exclude: [
       'node_modules/**',
       '.netlify/**',
@@ -20,6 +21,7 @@ export default defineConfig({
         'node_modules/**',
         '.netlify/**',
         'coverage/**',
+        '__tests__/**',
         'assets/js/functions.js',
         '**/*.test.js',
         '**/*.spec.js',

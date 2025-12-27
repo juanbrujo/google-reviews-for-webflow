@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { handler } from '../../netlify/functions/google-reviews.js';
+import { handler } from '../netlify/functions/google-reviews.js';
 
 describe('Google Reviews API Function', () => {
   beforeEach(() => {
