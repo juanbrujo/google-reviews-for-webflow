@@ -4,13 +4,14 @@
 
 Add authentic customer reviews from Google to your Webflow website with our lightweight, SEO-optimized widget. Features responsive carousel design, dark/light theming, and more. Perfect for Webflow CMS, Webflow Ecommerce, and static sites.
 
-[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Netlify Status](https://img.shields.io/badge/Netlify-Ready-00C7B7?logo=netlify)](https://netlify.com)
-[![Webflow Compatible](https://img.shields.io/badge/Webflow-Compatible-4353FF?logo=webflow)](https://webflow.com)
-[![Tests](https://img.shields.io/badge/Tests-49%20passing-success)](TESTING.md)
-[![API Coverage](https://img.shields.io/badge/API%20Coverage-100%25-brightgreen)](TESTING.md)
+![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)
+![MIT License](https://img.shields.io/badge/License-MIT-green.svg)
+![Netlify Status](https://img.shields.io/badge/Netlify-Ready-00C7B7?logo=netlify)
+![Webflow Compatible](https://img.shields.io/badge/Webflow-Compatible-4353FF?logo=webflow)
+![Tests](https://img.shields.io/badge/Tests-49%20passing-success)
+![API Coverage](https://img.shields.io/badge/API%20Coverage-100%25-brightgreen)
 
-**🔗 [Live Demo](https://google-reviews-for-webflow.netlify.app/)
+🔗 [Live Demo](https://google-reviews-for-webflow.netlify.app/)
 
 ---
 

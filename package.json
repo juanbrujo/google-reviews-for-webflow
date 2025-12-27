@@ -1,6 +1,6 @@
 {
   "name": "google-reviews-for-webflow",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Free, open-source widget to embed Google Reviews in Webflow CMS sites",
   "private": true,
   "main": "assets/js/main.js",
@@ -28,7 +28,10 @@
     "carousel",
     "responsive"
   ],
-  "author": "Google Reviews for Webflow Contributors",
+  "author": "Jorge Epuñan H. (https://github.com/juanbrujo)",
+  "contributors": [
+    "Google Reviews for Webflow Contributors"
+  ],
   "license": "MIT",
   "devDependencies": {
     "@vitest/coverage-v8": "^4.0.16",
