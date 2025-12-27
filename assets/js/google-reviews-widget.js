@@ -197,6 +197,17 @@
     if (header) root.appendChild(header);
     root.appendChild(carousel);
 
+    // Toggle navigation visibility based on scroll availability
+    const updateNavVisibility = () => {
+      const hasScroll = track.scrollWidth > track.clientWidth;
+      prev.style.display = hasScroll ? "" : "none";
+      next.style.display = hasScroll ? "" : "none";
+    };
+    
+    // Check on load and resize
+    setTimeout(updateNavVisibility, 100);
+    window.addEventListener("resize", updateNavVisibility);
+
     // Auto-play with pause on hover
     if (autoplayMs > 0) {
       let id = setInterval(scrollByCard(1), autoplayMs);
