@@ -29,7 +29,22 @@ const SAMPLE = {
 
 const withDefault = (value, fallback) => (value === undefined || value === null || value === "" ? fallback : value);
 
-exports.handler = async (event) => {
+// CORS headers for all responses
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "Content-Type",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+};
+
+export const handler = async (event) => {
+  // Handle preflight OPTIONS request
+  if (event.httpMethod === "OPTIONS") {
+    return {
+      statusCode: 200,
+      headers: corsHeaders,
+      body: "",
+    };
+  }
   const apiKey = process.env.GOOGLE_PLACES_API_KEY;
   const defaultPlaceId = process.env.PLACE_ID;
   const qs = new URLSearchParams(event.queryStringParameters || {});
@@ -40,6 +55,10 @@ exports.handler = async (event) => {
   if (!placeId) {
     return {
       statusCode: 400,
+      headers: {
+        "Content-Type": "application/json",
+        ...corsHeaders,
+      },
       body: JSON.stringify({ error: "Missing placeId" }),
     };
   }
@@ -48,7 +67,10 @@ exports.handler = async (event) => {
   if (!apiKey) {
     return {
       statusCode: 200,
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        ...corsHeaders,
+      },
       body: JSON.stringify({
         meta: { source: "sample", fetchedAt: new Date().toISOString() },
         ...SAMPLE,
@@ -72,6 +94,10 @@ exports.handler = async (event) => {
     if (payload.status !== "OK") {
       return {
         statusCode: 502,
+        headers: {
+          "Content-Type": "application/json",
+          ...corsHeaders,
+        },
         body: JSON.stringify({ error: payload.status, details: payload.error_message || null }),
       };
     }
@@ -95,6 +121,7 @@ exports.handler = async (event) => {
       headers: {
         "Content-Type": "application/json",
         "Cache-Control": "public, max-age=600",
+        ...corsHeaders,
       },
       body: JSON.stringify({
         meta: { source: "google-places", fetchedAt: new Date().toISOString() },
@@ -110,6 +137,10 @@ exports.handler = async (event) => {
   } catch (error) {
     return {
       statusCode: 500,
+      headers: {
+        "Content-Type": "application/json",
+        ...corsHeaders,
+      },
       body: JSON.stringify({ error: "upstream_error", message: error.message }),
     };
   }
