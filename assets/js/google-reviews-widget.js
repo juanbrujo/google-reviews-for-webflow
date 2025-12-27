@@ -174,7 +174,7 @@
 
   // Grid Layout
   const renderGrid = (root, place, reviews) => {
-    const grid = createEl("div", { class: "review-grid" }, reviews.map(reviewCard));
+    const grid = createEl("div", { class: "review-grid", "data-count": String(reviews.length) }, reviews.map(reviewCard));
     root.innerHTML = "";
     const header = placeHeader(place);
     if (header) root.appendChild(header);
@@ -183,7 +183,7 @@
 
   // Carousel Layout with circular scrolling
   const renderCarousel = (root, place, reviews, autoplayMs) => {
-    const track = createEl("div", { class: "carousel-track", role: "list" }, reviews.map((r) => createEl("div", { role: "listitem" }, [reviewCard(r)])));
+    const track = createEl("div", { class: "carousel-track", role: "list", "data-count": String(reviews.length) }, reviews.map((r) => createEl("div", { role: "listitem" }, [reviewCard(r)])));
     const prev = createEl("button", { type: "button", class: "carousel-btn prev", "aria-label": "Previous" }, ["◀"]);
     const next = createEl("button", { type: "button", class: "carousel-btn next", "aria-label": "Next" }, ["▶"]);
 
@@ -268,7 +268,7 @@
       .then((data) => format(data, opts.max, opts.minRating))
       .then(({ place, reviews }) => {
         if (!reviews.length) {
-          setLoading("No reviews available.");
+          root.innerHTML = "";
           return;
         }
         const result = opts.layout === "grid"

@@ -74,6 +74,15 @@
   align-items: stretch;
 }
 
+/* Ajustar grid según cantidad de reviews */
+.grw-widget .review-grid[data-count="1"] {
+  grid-template-columns: 1fr;
+}
+
+.grw-widget .review-grid[data-count="2"] {
+  grid-template-columns: repeat(2, 1fr);
+}
+
 /* Review Card */
 .grw-widget .review-card {
   background: var(--grw-card-bg);
@@ -171,6 +180,15 @@
   flex: 0 0 calc((100% - calc(var(--grw-space) * 4)) / 3);
   min-width: calc(var(--grw-space) * 32);
   display: flex;
+}
+
+/* Ajustar ancho según cantidad de reviews */
+.grw-widget .carousel-track[data-count="1"] > div {
+  flex-basis: 100%;
+}
+
+.grw-widget .carousel-track[data-count="2"] > div {
+  flex-basis: calc((100% - calc(var(--grw-space) * 2)) / 2);
 }
 
 .grw-widget .carousel-track::-webkit-scrollbar {
