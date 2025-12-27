@@ -13,7 +13,7 @@
   <meta name="title" content="Google Reviews Widget for Webflow | Free Open-Source Integration">
   <meta name="description" content="Add Google Reviews to Webflow with our free widget. Responsive carousel, dark/light themes, secure API proxy, and more. Zero dependencies, SEO-optimized.">
   <meta name="keywords" content="webflow google reviews, webflow widget, google places api webflow, webflow cms reviews, webflow integrations, customer reviews webflow, testimonials widget webflow">
-  <meta name="author" content="Google Reviews for Webflow Contributors">
+  <meta name="author" content="Jorge Epuñan">
   <link rel="canonical" href="https://google-reviews-for-webflow.netlify.app/">
   
   <!-- Open Graph / Facebook -->
@@ -61,7 +61,7 @@
     "operatingSystem": "Web Browser",
     "url": "https://google-reviews-for-webflow.netlify.app/",
     "description": "Free, open-source widget to embed Google Reviews in Webflow CMS sites. Features responsive carousel, dark/light themes, secure backend, and more. Zero dependencies, SEO-optimized.",
-    "softwareVersion": "1.0.0",
+    "softwareVersion": "2.0.0",
     "datePublished": "2025-12-26",
     "offers": {
       "@type": "Offer",
@@ -78,14 +78,19 @@
       "SEO-optimized markup",
       "Auto-play carousel with loop",
       "Avatar images with fallback",
-      "5-star rating display"
+      "5-star rating display",
+      "JavaScript API with lifecycle callbacks",
+      "Dynamic updates without page reload",
+      "Instance-based architecture",
+      "Multi-location support"
     ],
     "programmingLanguage": ["JavaScript", "HTML", "CSS"],
     "codeRepository": "https://github.com/",
     "license": "https://opensource.org/licenses/MIT",
     "creator": {
-      "@type": "Organization",
-      "name": "Google Reviews for Webflow Contributors"
+      "@type": "Person",
+      "name": "Jorge Epuñan",
+      "url": "https://github.com/juanbrujo"
     },
     "aggregateRating": {
       "@type": "AggregateRating",
@@ -100,8 +105,8 @@
     <div class="hero__content">
       <p class="eyebrow">SEO-ready · Schema.org Review · AggregateRating · Rich Snippets Ready</p>
       <h1>Embed Google Reviews in Webflow CMS</h1>
-      <div class="pill" role="text">Vanilla JS · Zero Dependencies · Open-Source · MIT License</div>
-      <p class="lede">Free, responsive widget to display Google Reviews on your Webflow site. Features dark/light themes, auto-play carousel, secure backend, and more. No coding required—just copy and embed.</p>
+      <div class="pill" role="text">v2.0 API · Vanilla JS · Zero Dependencies · Open-Source · MIT License</div>
+      <p class="lede">Free, responsive widget to display Google Reviews on your Webflow site. Features dark/light themes, auto-play carousel, secure backend, JavaScript API with callbacks, and more. Auto-init or programmatic control.</p>
       <div class="cta-row">
         <a class="btn primary" href="#demo" aria-label="View live demo of Google Reviews widget">View Live Demo</a>
         <a class="btn ghost" href="#setup" aria-label="Jump to setup instructions">Quick Setup Guide</a>
@@ -182,6 +187,34 @@
             <li><code>data-autoplay</code>: ms delay for carousel (0 = disabled)</li>
             <li><code>data-locale</code>: BCP-47 language tag (e.g., <code>es</code>, <code>en</code>)</li>
           </ul>
+        </li>
+        <li><strong>Advanced: Use JavaScript API (v2.0):</strong> For dynamic control, use the programmatic API with callbacks:
+          <div class="code-block">
+            <pre><code>// Manual initialization with lifecycle callbacks
+const widget = GoogleReviewsWidget.init('#google-reviews-widget', {
+  endpoint: 'https://your-site.netlify.app/.netlify/functions/google-reviews',
+  layout: 'carousel',
+  mode: 'dark',
+  max: 8,
+  minRating: 4,
+  beforeInit: (instance) => {
+    console.log('Widget initializing...');
+  },
+  created: (instance) => {
+    console.log('Widget ready!');
+  }
+});
+
+// Update widget dynamically (no page reload)
+widget.update({ minRating: 5, layout: 'grid' });
+
+// Destroy widget when needed
+widget.destroy();</code></pre>
+          </div>
+          <p style="margin-top: calc(var(--space) * 2); color: var(--muted);">
+            📖 Full API documentation: <a href="API.md" style="color: var(--accent-2); text-decoration: underline;">API.md</a> | 
+            Interactive examples: <a href="examples.html" style="color: var(--accent-2); text-decoration: underline;">examples.html</a>
+          </p>
         </li>
       </ol>
     </section>
