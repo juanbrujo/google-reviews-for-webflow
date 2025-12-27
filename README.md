@@ -7,6 +7,8 @@ Add authentic customer reviews from Google to your Webflow website with our ligh
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Netlify Status](https://img.shields.io/badge/Netlify-Ready-00C7B7?logo=netlify)](https://netlify.com)
 [![Webflow Compatible](https://img.shields.io/badge/Webflow-Compatible-4353FF?logo=webflow)](https://webflow.com)
+[![Tests](https://img.shields.io/badge/Tests-49%20passing-success)](TESTING.md)
+[![API Coverage](https://img.shields.io/badge/API%20Coverage-100%25-brightgreen)](TESTING.md)
 
 **🔗 [Live Demo](https://google-reviews-for-webflow.netlify.app/) | 🖼️ [Open Graph Image](https://google-reviews-for-webflow.netlify.app/assets/img/og-image.png) | 📖 [Documentation](#-quick-start) | 🏗️ [Architecture](ARCHITECTURE.md) | 🐛 [Report Issue](#-support)**
 
@@ -60,6 +62,7 @@ Add a **Code Embed** block in Webflow:
 ```html
 <div id="google-reviews-widget"
      data-endpoint="https://<your-site>.netlify.app/.netlify/functions/google-reviews"
+     data-placeid="ChIJN1t_tDeuEmsRUsoyG83frY4"
      data-layout="carousel"
      data-mode="dark">
 </div>
@@ -102,6 +105,7 @@ Add these to your widget `<div>`:
 | Attribute | Values | Default | Description |
 |-----------|--------|---------|-------------|
 | `data-endpoint` | URL | (required) | Backend endpoint URL |
+| `data-placeid` | string | (optional) | Google Place ID (overrides env PLACE_ID) |
 | `data-layout` | `carousel`, `grid` | `carousel` | Display layout |
 | `data-mode` | `dark`, `light` | `light` | Theme mode |
 | `data-max` | number | `10` | Max reviews to display |
@@ -115,7 +119,7 @@ Set these in your Netlify site settings:
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
 | `GOOGLE_PLACES_API_KEY` | ✅ Yes | — | Your Google Places API key |
-| `PLACE_ID` | ✅ Yes | — | Google Place ID for your business |
+| `PLACE_ID` | ❌ Optional | — | Default Google Place ID (fallback if `data-placeid` not set) |
 | `REVIEWS_LANGUAGE` | ❌ Optional | `en` | Language code (overridden by `data-locale` if set) |
 
 **Note:** The backend returns all available reviews from Google Places. Apply display limits and filters client-side using `data-max` and `data-min-rating` (the backend does not enforce a limit).
@@ -160,6 +164,29 @@ netlify dev
 ```
 
 Visit `index.html` in browser to see the demo with sample data.
+
+## 🧪 Testing
+
+```bash
+# Run all tests (49 tests: 33 widget + 16 API)
+npm test
+
+# Watch mode for development
+npm run test:watch
+
+# Interactive UI
+npm run test:ui
+
+# Coverage report (API: 100%)
+npm run test:coverage
+```
+
+**Test Coverage:**
+- ✅ **49 tests passing**
+- ✅ **API: 100%** coverage (statements, functions, branches)
+- ✅ Widget: Core logic validated (IIFE architecture)
+
+See [TESTING.md](TESTING.md) for complete testing documentation.
 
 ## 🔒 Security
 

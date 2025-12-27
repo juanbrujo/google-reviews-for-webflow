@@ -1,6 +1,7 @@
 /**
  * Google Reviews Widget - Standalone JavaScript
  * Zero dependencies, framework-agnostic, works anywhere.
+ * https://github.com/juanbrujo/google-reviews-for-webflow
  * 
  * Usage:
  * <div id="google-reviews-widget"
@@ -55,6 +56,7 @@
 
   const getOptions = (root) => ({
     endpoint: root.dataset.endpoint,
+    placeId: root.dataset.placeid || "",
     layout: root.dataset.layout || "carousel",
     max: Number(root.dataset.max || 10),
     minRating: Number(root.dataset.minRating || 0),
@@ -225,10 +227,11 @@
   };
 
   // Fetch reviews from endpoint
-  const fetchReviews = async (endpoint, locale) => {
+  const fetchReviews = async (endpoint, locale, placeId) => {
     if (!endpoint) return sample;
     const url = new URL(endpoint, window.location.origin);
     url.searchParams.set("language", locale);
+    if (placeId) url.searchParams.set("placeId", placeId);
     const res = await fetch(url.toString());
     if (!res.ok) throw new Error(`Fetch failed: ${res.status}`);
     return res.json();
@@ -241,7 +244,7 @@
 
     setLoading("Loading reviews...");
 
-    fetchReviews(opts.endpoint, opts.locale)
+    fetchReviews(opts.endpoint, opts.locale, opts.placeId)
       .then((data) => format(data, opts.max, opts.minRating))
       .then(({ place, reviews }) => {
         if (!reviews.length) {

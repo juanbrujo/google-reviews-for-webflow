@@ -20,6 +20,11 @@ dist/
 build/
 .cache/
 
+# Test coverage
+coverage/
+.coverage/
+*.lcov
+
 # Logs
 *.log
 npm-debug.log*

@@ -9,7 +9,10 @@
     "dev": "netlify dev",
     "build": "echo 'No build step required - pure static HTML/CSS/JS'",
     "start": "netlify dev",
-    "test": "echo 'No tests configured yet'",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage",
     "lint": "echo 'Add eslint for linting'",
     "format": "prettier --write '**/*.{html,css,js,json,md}'",
     "serve": "python3 -m http.server 8000"
@@ -28,7 +31,11 @@
   "author": "Google Reviews for Webflow Contributors",
   "license": "MIT",
   "devDependencies": {
-    "netlify-cli": "^17.0.0"
+    "@vitest/coverage-v8": "^4.0.16",
+    "@vitest/ui": "^4.0.16",
+    "happy-dom": "^20.0.11",
+    "netlify-cli": "^17.0.0",
+    "vitest": "^4.0.16"
   },
   "repository": {
     "type": "git",

@@ -152,7 +152,7 @@
         <li><strong>Deploy to Netlify:</strong> Push this repo to GitHub, connect to Netlify, and add environment variables:
           <ul>
             <li><code class="primary">GOOGLE_PLACES_API_KEY</code> = your API key</li>
-            <li><code class="primary">PLACE_ID</code> = your place ID</li>
+            <li><code class="primary">PLACE_ID</code> = default place ID (optional, fallback if <code>data-placeid</code> not set)</li>
             <li><code class="primary">REVIEWS_LANGUAGE</code> (optional, default <code>en</code>; overridden by <code>data-locale</code>)</li>
           </ul>
         </li>
@@ -160,6 +160,7 @@
           <div class="code-block">
             <pre><code>&lt;div id="google-reviews-widget"
      data-endpoint="https://your-site.netlify.app/.netlify/functions/google-reviews"
+     data-placeid="ChIJN1t_tDeuEmsRUsoyG83frY4"
      data-layout="carousel"
      data-mode="dark"
      data-max="8"
@@ -173,6 +174,7 @@
         </li>
         <li><strong>Customize:</strong> Adjust these data attributes:
           <ul>
+            <li><code>data-placeid</code>: Google Place ID (optional, overrides env PLACE_ID)</li>
             <li><code>data-layout</code>: <code>carousel</code> or <code>grid</code></li>
             <li><code>data-mode</code>: <code>dark</code> or <code>light</code></li>
             <li><code>data-max</code>: number of reviews (default 10)</li>
@@ -188,7 +190,7 @@
   <footer class="footer">
     <p>
       <strong>Google Reviews for Webflow</strong> · 
-      <a href="https://github.com/" rel="noopener noreferrer" style="color: var(--accent-2); text-decoration: underline;">GitHub</a> · 
+      <a href="https://github.com/juanbrujo/google-reviews-for-webflow" rel="noopener noreferrer" style="color: var(--accent-2); text-decoration: underline;">GitHub</a> · 
       <a href="LICENSE" style="color: var(--accent-2); text-decoration: underline;">MIT License</a> · 
       Built for <a href="https://webflow.com" rel="noopener noreferrer" style="color: var(--accent-2); text-decoration: underline;">Webflow</a> + 
       <a href="https://netlify.com" rel="noopener noreferrer" style="color: var(--accent-2); text-decoration: underline;">Netlify</a>
