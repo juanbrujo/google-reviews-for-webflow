@@ -1,0 +1,41 @@
+{
+  "name": "google-reviews-for-webflow",
+  "version": "1.0.0",
+  "description": "Free, open-source widget to embed Google Reviews in Webflow CMS sites",
+  "private": true,
+  "main": "assets/js/main.js",
+  "type": "module",
+  "scripts": {
+    "dev": "netlify dev",
+    "build": "echo 'No build step required - pure static HTML/CSS/JS'",
+    "start": "netlify dev",
+    "test": "echo 'No tests configured yet'",
+    "lint": "echo 'Add eslint for linting'",
+    "format": "prettier --write '**/*.{html,css,js,json,md}'",
+    "serve": "python3 -m http.server 8000"
+  },
+  "keywords": [
+    "webflow",
+    "google-reviews",
+    "widget",
+    "integration",
+    "cms",
+    "netlify",
+    "places-api",
+    "carousel",
+    "responsive"
+  ],
+  "author": "Google Reviews for Webflow Contributors",
+  "license": "MIT",
+  "devDependencies": {
+    "netlify-cli": "^17.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/google-reviews-for-webflow.git"
+  },
+  "homepage": "https://google-reviews-for-webflow.netlify.app/",
+  "bugs": {
+    "url": "https://github.com/your-org/google-reviews-for-webflow/issues"
+  }
+}
