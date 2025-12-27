@@ -90,7 +90,15 @@ main { padding: 0 clamp(calc(var(--space) * 2), 6vw, calc(var(--space) * 9)) cal
 
 .panel__head { display: flex; justify-content: space-between; gap: calc(var(--space) * 2); align-items: flex-start; flex-wrap: wrap; }
 
-.google-reviews-wrapper { padding: calc((var(--space) * 2)) 0; }
+.google-reviews-wrapper { 
+  padding: calc((var(--space) * 3)) 0; 
+  transition: background-color 300ms ease;
+}
+
+/* Light mode background for wrapper */
+.google-reviews-wrapper:has([data-mode="light"]) {
+  background-color: white;
+}
 
 .chipset { display: flex; gap: calc(var(--space) * 1); flex-wrap: wrap; }
 .chip { padding: calc(var(--space) * 1) calc(var(--space) * 2); border-radius: 999px; background: rgba(124,58,237,.15); color: var(--accent-2); border: 1px solid var(--border); }

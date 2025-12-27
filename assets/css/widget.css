@@ -177,7 +177,7 @@
 }
 
 .grw-widget .carousel-track::-webkit-scrollbar-thumb {
-  background: var(--grw-scrollbar);
+  background: var(--grw-muted);
   border-radius: 999px;
 }
 
