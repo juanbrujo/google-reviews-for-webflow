@@ -1,0 +1,238 @@
+/**
+ * Google Reviews Widget - Standalone Styles
+ * Import this stylesheet in Webflow for isolated widget theming.
+ */
+
+:root {
+  --grw-space: 8px;
+  --grw-radius: calc(var(--grw-space) * 2);
+  --grw-card-height: calc(var(--grw-space) * 30);
+}
+
+/* Dark Mode Theme */
+.grw-widget.grw-dark {
+  --grw-bg: #0b1224;
+  --grw-card-bg: #0b1224;
+  --grw-text: #e5e7eb;
+  --grw-muted: #9ca3af;
+  --grw-border: #1f2937;
+  --grw-accent: #3aed8e;
+  --grw-accent-2: #22d3ee;
+  --grw-rating: #fbbf24;
+  --grw-shadow: 0 calc(var(--grw-space) * 2) calc(var(--grw-space) * 4) rgba(0, 0, 0, 0.25);
+  --grw-btn-bg: rgba(255, 255, 255, 0.04);
+  --grw-btn-hover-border: rgba(124, 58, 237, 0.6);
+  --grw-scrollbar: rgba(124, 58, 237, 0.5);
+}
+
+/* Light Mode Theme */
+.grw-widget.grw-light {
+  --grw-bg: #ffffff;
+  --grw-card-bg: #f9fafb;
+  --grw-text: #111827;
+  --grw-muted: #6b7280;
+  --grw-border: #e5e7eb;
+  --grw-accent: #7c3aed;
+  --grw-accent-2: #06b6d4;
+  --grw-rating: #f59e0b;
+  --grw-shadow: 0 calc(var(--grw-space) * 2) calc(var(--grw-space) * 4) rgba(0, 0, 0, 0.08);
+  --grw-btn-bg: rgba(0, 0, 0, 0.04);
+  --grw-btn-hover-border: rgba(124, 58, 237, 0.4);
+  --grw-scrollbar: rgba(124, 58, 237, 0.3);
+}
+
+/* Widget Container */
+.grw-widget {
+  position: relative;
+  font-size: calc(var(--grw-space) * 2);
+  color: var(--grw-text);
+}
+
+/* Place Header */
+.grw-widget .place-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--grw-space) * 2);
+  margin: 0 0 calc(var(--grw-space) * 2);
+  font-size: calc(var(--grw-space) * 3);
+}
+
+/* Loading State */
+.grw-widget .loading {
+  color: var(--grw-muted);
+  padding: calc(var(--grw-space) * 2);
+  text-align: center;
+}
+
+/* Review Grid Layout */
+.grw-widget .review-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(calc(var(--grw-space) * 32), 1fr));
+  gap: calc(var(--grw-space) * 2);
+  align-items: stretch;
+}
+
+/* Review Card */
+.grw-widget .review-card {
+  background: var(--grw-card-bg);
+  border: 1px solid var(--grw-border);
+  border-radius: var(--grw-radius);
+  padding: calc(var(--grw-space) * 2);
+  display: grid;
+  gap: calc(var(--grw-space) * 1);
+  height: var(--grw-card-height);
+  grid-template-rows: auto 1fr;
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.grw-widget .review-card:hover {
+  transform: translateY(calc(-0.5 * var(--grw-space)));
+  box-shadow: 0 calc(var(--grw-space) * 2) calc(var(--grw-space) * 4) rgba(0, 0, 0, 0.15);
+}
+
+/* Review Header */
+.grw-widget .review-header {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--grw-space) * 1);
+}
+
+/* Avatar */
+.grw-widget .avatar {
+  width: calc(var(--grw-space) * 5);
+  height: calc(var(--grw-space) * 5);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-weight: 700;
+  flex-shrink: 0;
+  overflow: hidden;
+  border: 2px solid var(--grw-border);
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+/* Avatar with photo */
+.grw-widget .avatar.has-photo {
+  background-color: #f0f0f0;
+}
+
+/* Avatar with initials (fallback) */
+.grw-widget .avatar.no-photo {
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.3), rgba(34, 211, 238, 0.25));
+  font-size: calc(var(--grw-space) * 2);
+}
+
+/* Rating Stars */
+.grw-widget .rating {
+  display: inline-flex;
+  gap: calc(var(--grw-space) * 1);
+  color: var(--grw-rating);
+  font-weight: 700;
+}
+
+/* Review Text */
+.grw-widget .review-text {
+  color: var(--grw-text);
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Meta Info */
+.grw-widget .meta {
+  color: var(--grw-muted);
+  font-size: 0.9rem;
+}
+
+/* Carousel Layout */
+.grw-widget .carousel {
+  position: relative;
+  padding: 0 calc(var(--grw-space) * 6);
+  overflow: hidden;
+}
+
+.grw-widget .carousel-track {
+  display: flex;
+  gap: calc(var(--grw-space) * 2);
+  scroll-behavior: smooth;
+  overflow-x: auto;
+  padding: calc(var(--grw-space) * 2);
+  align-items: stretch;
+}
+
+.grw-widget .carousel-track > div {
+  flex: 0 0 calc((100% - calc(var(--grw-space) * 4)) / 3);
+  min-width: calc(var(--grw-space) * 32);
+  display: flex;
+}
+
+.grw-widget .carousel-track::-webkit-scrollbar {
+  height: calc(var(--grw-space) * 1);
+}
+
+.grw-widget .carousel-track::-webkit-scrollbar-thumb {
+  background: var(--grw-scrollbar);
+  border-radius: 999px;
+}
+
+.grw-widget .carousel-track::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Carousel Controls */
+.grw-widget .carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 1px solid var(--grw-border);
+  background: var(--grw-btn-bg);
+  color: var(--grw-text);
+  padding: calc(var(--grw-space) * 1) calc(var(--grw-space) * 2);
+  border-radius: var(--grw-space);
+  cursor: pointer;
+  transition: border-color 150ms ease, transform 150ms ease, background 150ms ease;
+  z-index: 10;
+}
+
+.grw-widget .carousel-btn:hover {
+  border-color: var(--grw-btn-hover-border);
+  transform: translateY(calc(-50% - var(--grw-space)));
+  background: var(--grw-btn-bg);
+}
+
+.grw-widget .carousel-btn.prev {
+  left: calc(var(--grw-space) * 1);
+}
+
+.grw-widget .carousel-btn.next {
+  right: calc(var(--grw-space) * 1);
+}
+
+/* Responsive: Tablet */
+@media (max-width: 1024px) {
+  .grw-widget .carousel-track > div {
+    flex-basis: calc((100% - calc(var(--grw-space) * 2)) / 2);
+  }
+}
+
+/* Responsive: Mobile */
+@media (max-width: 640px) {
+  .grw-widget .carousel {
+    padding: 0 calc(var(--grw-space) * 4);
+  }
+
+  .grw-widget .carousel-track > div {
+    flex-basis: 100%;
+    min-width: 0;
+  }
+
+  .grw-widget .carousel-btn {
+    padding: calc(var(--grw-space) * 1) calc(var(--grw-space) * 1);
+  }
+}

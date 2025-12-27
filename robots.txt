@@ -1,0 +1,6 @@
+# robots.txt for Google Reviews for Webflow
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://google-reviews-for-webflow.netlify.app/sitemap.xml

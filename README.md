@@ -1,0 +1,233 @@
+# Google Reviews Widget for Webflow | Free Open-Source Integration
+
+> 🌟 **Free, responsive widget to embed Google Reviews in Webflow CMS sites**
+
+Add authentic customer reviews from Google to your Webflow website with our lightweight, SEO-optimized widget. Features responsive carousel design, dark/light theming, and more. Perfect for Webflow CMS, Webflow Ecommerce, and static sites.
+
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Netlify Status](https://img.shields.io/badge/Netlify-Ready-00C7B7?logo=netlify)](https://netlify.com)
+[![Webflow Compatible](https://img.shields.io/badge/Webflow-Compatible-4353FF?logo=webflow)](https://webflow.com)
+
+**🔗 [Live Demo](https://google-reviews-for-webflow.netlify.app/) | �️ [Open Graph Image](https://google-reviews-for-webflow.netlify.app/assets/img/og-image.png) | �📖 [Documentation](#-quick-start) | 🐛 [Report Issue](#-support)**
+
+---
+
+## 🎯 Features
+- **Lightweight & Framework-free**: Vanilla HTML, CSS, and JavaScript (functional programming style)
+- **Secure Backend**: Netlify Function proxy prevents exposing your API key
+- **Responsive Carousel**: 3 cards (desktop) → 2 (tablet) → 1 (mobile) with centered controls
+- **Dark/Light Theming**: CSS custom properties enable easy theme switching with `data-mode` attribute
+- **8px Grid System**: All spacing follows `calc(var(--space) * n)` for consistency
+- **Avatar Support**: User profile photos with automatic fallback to initials
+- **SEO-Optimized**: Schema.org microdata on every review card (Review, Rating, LocalBusiness schemas)
+- **Rich Snippets Ready**: Google can display star ratings and review counts in search results
+- **Structured Data**: JSON-LD + microdata for maximum search engine visibility
+- **Fallback Data**: Sample reviews included for local development without API keys
+- **Zero Dependencies**: No npm packages required; deploys instantly to Netlify
+
+> 📊 **SEO Details**: Each review card includes Schema.org Review markup with author, rating, date, and body. The place header includes LocalBusiness and AggregateRating schemas. See [SEO.md](SEO.md) for complete documentation.
+
+### 🔎 SEO Features
+- Review microdata on each card (`Review`, `Rating`, `datePublished`, `reviewBody`)
+- Aggregate rating in header (`LocalBusiness` + `AggregateRating` with `ratingValue`, `reviewCount`)
+- JSON-LD `SoftwareApplication` on the landing page for better discovery
+- Open Graph + Twitter Cards for social sharing previews
+- Eligible for Google Rich Results (stars and review counts)
+
+## 🚀 Quick Start
+
+### 1. Get Your Google API Key & Place ID
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project and enable **Places API**
+3. Create an **API Key** (restrict to places API for security)
+4. Find your **Place ID** using [Places API Explorer](https://developers.google.com/maps/documentation/places/web-service/overview)
+
+### 2. Deploy to Netlify
+1. Push this repo to GitHub
+2. Import site from GitHub in [Netlify Dashboard](https://app.netlify.com/)
+3. Set environment variables in **Site Settings → Build & Deploy → Environment**:
+   ```
+   GOOGLE_PLACES_API_KEY=your_api_key_here
+   PLACE_ID=your_place_id_here
+   REVIEWS_LANGUAGE=es
+   ```
+4. Deploy is automatic. Your function runs at `https://<your-site>.netlify.app/.netlify/functions/google-reviews`
+
+### 3. Embed in Webflow
+Add a **Code Embed** block in Webflow:
+
+```html
+<div id="reviews-widget"
+     data-endpoint="https://<your-site>.netlify.app/.netlify/functions/google-reviews"
+     data-layout="carousel"
+     data-mode="dark">
+</div>
+
+<link rel="stylesheet" href="https://<your-site>.netlify.app/assets/css/widget.css">
+<script src="https://<your-site>.netlify.app/assets/js/main.js" defer></script>
+```
+
+Replace `<your-site>` with your actual Netlify domain.
+
+## 📂 Project Structure
+```
+├── index.html                           # Landing page & demo with theme toggle
+├── README.md                            # This file
+├── LICENSE                              # MIT license
+├── netlify.toml                         # Netlify configuration
+├── .env.example                         # Environment variable template
+├── AGENTS.md                            # Contribution roles
+├── assets/
+│   ├── css/
+│   │   ├── style.css                   # Landing page styles (8px grid, theme variables)
+│   │   └── widget.css                  # Widget styles (scoped .grw-widget, dark/light themes)
+│   └── js/
+│       └── main.js                     # Widget init & render (vanilla JS, functional helpers)
+└── netlify/
+    └── functions/
+        └── google-reviews.js           # Google Places API proxy (Node.js)
+```
+
+## ⚙️ Configuration
+
+### Data Attributes (HTML)
+Add these to your widget `<div>`:
+
+| Attribute | Values | Default | Description |
+|-----------|--------|---------|-------------|
+| `data-endpoint` | URL | (required) | Netlify Function endpoint |
+| `data-layout` | `carousel`, `grid` | `carousel` | Display layout |
+| `data-mode` | `dark`, `light` | `light` | Theme mode |
+| `data-max` | number | `10` | Max reviews to display |
+| `data-min-rating` | 1–5 | `4` | Minimum star rating filter |
+| `data-autoplay` | ms (0 = disabled) | `0` | Carousel autoplay delay |
+| `data-locale` | BCP-47 tag | `es` | Language code (passed to API) |
+
+### Environment Variables (Netlify)
+Set these in your Netlify site settings:
+
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `GOOGLE_PLACES_API_KEY` | ✅ Yes | — | Your Google Places API key |
+| `PLACE_ID` | ✅ Yes | — | Google Place ID for your business |
+| `REVIEWS_LANGUAGE` | ❌ Optional | `en` | Language code (overridden by `data-locale` if set) |
+
+**Note:** Review limit is controlled by the `data-max` attribute in the frontend widget, not by backend environment variables.
+
+## 🎨 Theming
+
+Widget uses CSS custom properties for colors. Switch themes by changing `data-mode`:
+
+```html
+<!-- Dark theme (default) -->
+<div id="reviews-widget" data-mode="dark"></div>
+
+<!-- Light theme -->
+<div id="reviews-widget" data-mode="light"></div>
+```
+
+Or toggle dynamically:
+```js
+document.getElementById('reviews-widget').setAttribute('data-mode', 'light');
+```
+
+CSS variables available in `widget.css`:
+- `--grw-space`: 8px (base unit)
+- `--grw-bg`: Background color
+- `--grw-text`: Text color
+- `--grw-card-bg`: Card background
+- `--grw-rating`: Star color
+- `--grw-muted`: Muted text
+- `--grw-border`: Border color
+- `--grw-card-height`: 240px
+
+## 📝 Local Development
+
+```bash
+# Install Netlify CLI (optional)
+npm install -g netlify-cli
+
+# Run local dev server with live functions
+netlify dev
+
+# Visit http://localhost:8888
+```
+
+Visit `index.html` in browser to see the demo with sample data.
+
+## 🔒 Security
+
+- **API Key Protection**: Your Google API Key is never exposed to the client. All requests go through the Netlify Function backend.
+- **Function Proxy**: `netlify/functions/google-reviews.js` handles API calls server-side.
+- **Environment Variables**: Sensitive config is stored in Netlify, not in code.
+
+## 📊 API Response
+
+The widget fetches from your endpoint and expects JSON like:
+
+```json
+{
+  "meta": {
+    "source": "google_places",
+    "timestamp": "2025-12-26T10:30:00Z"
+  },
+  "place": {
+    "name": "Business Name",
+    "rating": 4.8,
+    "review_count": 245
+  },
+  "reviews": [
+    {
+      "author_name": "John Doe",
+      "rating": 5,
+      "text": "Great service!",
+      "time": 1703592600,
+      "profile_photo_url": "https://..."
+    }
+  ]
+}
+```
+
+## 🎯 Browser Support
+- Chrome, Edge, Firefox, Safari (modern versions)
+- Mobile: iOS Safari 12+, Chrome on Android
+- Uses CSS Grid, CSS custom properties, and ES6
+
+## 🤝 Contributing
+See [AGENTS.md](AGENTS.md) for roles and contribution guidelines.
+
+**Tips**:
+- Keep JavaScript functional (no classes, prefer helper functions)
+- No heavy dependencies; vanilla JS only
+- Test responsive behavior at 320px, 768px, 1024px widths
+- Respect Google Places API quotas
+
+## 📄 License
+
+MIT License - see [LICENSE](LICENSE) file for details.
+
+**Copyright (c) 2025 Google Reviews for Webflow Contributors**
+
+This project is open source and free to use, modify, and distribute under the MIT license terms.
+
+## 🐛 Troubleshooting
+
+**Widget not showing?**
+- Check that `data-endpoint` is correct and accessible
+- Open browser console for errors
+- Verify Netlify Function is deployed: visit `/.netlify/functions/google-reviews` in your browser
+
+**Images not loading?**
+- Profile photos require CORS. If they fail, initials are shown as fallback
+- Check Google Places API is enabled in Cloud Console
+
+**Styling issues in Webflow?**
+- Import `widget.css` only (not `style.css`, which is for the landing page)
+- The widget is scoped to `.grw-widget` class, so it won't conflict with Webflow styles
+
+## 📞 Support
+
+For issues, feature requests, or questions:
+1. Check [GitHub Issues](https://github.com/)
+2. Review [AGENTS.md](AGENTS.md) for contribution process
+3. Test with sample data first (no API key needed)
