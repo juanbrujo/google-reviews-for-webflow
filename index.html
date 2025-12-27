@@ -47,8 +47,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
   
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="stylesheet" href="assets/css/widget.css">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="stylesheet" href="assets/css/google-reviews-widget.css">
   <link rel="image_src" href="https://google-reviews-for-webflow.netlify.app/assets/img/og-image.png">
   <!-- Structured Data / Schema.org -->
   <script type="application/ld+json">
@@ -167,8 +167,8 @@
      data-autoplay="6000"
      data-locale="en"&gt;
 &lt;/div&gt;
-&lt;link rel="stylesheet" href="https://your-site.netlify.app/assets/css/widget.css"&gt;
-&lt;script src="https://your-site.netlify.app/assets/js/main.js" defer&gt;&lt;/script&gt;</code></pre>
+&lt;link rel="stylesheet" href="https://your-site.netlify.app/assets/css/google-reviews-widget.css"&gt;
+&lt;script src="https://your-site.netlify.app/assets/js/google-reviews-widget.js" defer&gt;&lt;/script&gt;</code></pre>
           </div>
         </li>
         <li><strong>Customize:</strong> Adjust these data attributes:
@@ -197,25 +197,7 @@
       Free widget to embed Google Reviews | Customer testimonials | Places API integration | Webflow CMS compatible
     </p>
   </footer>
-  <script>
-    // Normalize endpoint to an absolute URL so the widget works on custom domains.
-    const widget = document.getElementById('google-reviews-widget');
-    if (widget) {
-      const endpoint = widget.dataset.endpoint || '/.netlify/functions/google-reviews';
-      widget.dataset.endpoint = endpoint.startsWith('http') ? endpoint : new URL(endpoint, window.location.origin).toString();
-    }
-    
-    // Theme toggle for demo
-    const themeToggle = document.getElementById('theme-toggle');
-    if (themeToggle && widget) {
-      themeToggle.addEventListener('change', (e) => {
-        const mode = e.target.value;
-        widget.dataset.mode = mode;
-        widget.classList.remove('grw-dark', 'grw-light');
-        widget.classList.add(`grw-${mode}`);
-      });
-    }
-  </script>
-  <script src="assets/js/main.js" defer></script>
+  <script src="assets/js/google-reviews-widget.js" defer></script>
+  <script src="assets/js/functions.js" defer></script>
 </body>
 </html>

@@ -8,12 +8,13 @@ Add authentic customer reviews from Google to your Webflow website with our ligh
 [![Netlify Status](https://img.shields.io/badge/Netlify-Ready-00C7B7?logo=netlify)](https://netlify.com)
 [![Webflow Compatible](https://img.shields.io/badge/Webflow-Compatible-4353FF?logo=webflow)](https://webflow.com)
 
-**🔗 [Live Demo](https://google-reviews-for-webflow.netlify.app/) | �️ [Open Graph Image](https://google-reviews-for-webflow.netlify.app/assets/img/og-image.png) | �📖 [Documentation](#-quick-start) | 🐛 [Report Issue](#-support)**
+**🔗 [Live Demo](https://google-reviews-for-webflow.netlify.app/) | 🖼️ [Open Graph Image](https://google-reviews-for-webflow.netlify.app/assets/img/og-image.png) | 📖 [Documentation](#-quick-start) | 🏗️ [Architecture](ARCHITECTURE.md) | 🐛 [Report Issue](#-support)**
 
 ---
 
 ## 🎯 Features
 - **Lightweight & Framework-free**: Vanilla HTML, CSS, and JavaScript (functional programming style)
+- **Fully Decoupled Widget**: `google-reviews-widget.js` + `google-reviews-widget.css` work standalone
 - **Secure Backend**: Netlify Function proxy prevents exposing your API key
 - **Responsive Carousel**: 3 cards (desktop) → 2 (tablet) → 1 (mobile) with centered controls
 - **Dark/Light Theming**: CSS custom properties enable easy theme switching with `data-mode` attribute
@@ -57,14 +58,14 @@ Add authentic customer reviews from Google to your Webflow website with our ligh
 Add a **Code Embed** block in Webflow:
 
 ```html
-<div id="reviews-widget"
+<div id="google-reviews-widget"
      data-endpoint="https://<your-site>.netlify.app/.netlify/functions/google-reviews"
      data-layout="carousel"
      data-mode="dark">
 </div>
 
-<link rel="stylesheet" href="https://<your-site>.netlify.app/assets/css/widget.css">
-<script src="https://<your-site>.netlify.app/assets/js/main.js" defer></script>
+<link rel="stylesheet" href="https://<your-site>.netlify.app/assets/css/google-reviews-widget.css">
+<script src="https://<your-site>.netlify.app/assets/js/google-reviews-widget.js" defer></script>
 ```
 
 Replace `<your-site>` with your actual Netlify domain.
@@ -74,15 +75,20 @@ Replace `<your-site>` with your actual Netlify domain.
 ├── index.html                           # Landing page & demo with theme toggle
 ├── README.md                            # This file
 ├── LICENSE                              # MIT license
+├── SEO.md                               # SEO implementation guide
 ├── netlify.toml                         # Netlify configuration
 ├── .env.example                         # Environment variable template
 ├── AGENTS.md                            # Contribution roles
 ├── assets/
 │   ├── css/
-│   │   ├── style.css                   # Landing page styles (8px grid, theme variables)
-│   │   └── widget.css                  # Widget styles (scoped .grw-widget, dark/light themes)
-│   └── js/
-│       └── main.js                     # Widget init & render (vanilla JS, functional helpers)
+│   │   ├── styles.css                  # Demo page styles (8px grid, smooth scroll)
+│   │   └── google-reviews-widget.css   # Widget styles (scoped .grw-widget, themes)
+│   ├── js/
+│   │   ├── google-reviews-widget.js    # Widget standalone code (framework-free)
+│   │   └── functions.js                # Demo-specific logic (theme toggle)
+│   └── img/
+│       ├── favicon.svg                 # SVG favicon
+│       └── og-image.png                # Open Graph preview image
 └── netlify/
     └── functions/
         └── google-reviews.js           # Google Places API proxy (Node.js)
@@ -120,18 +126,18 @@ Widget uses CSS custom properties for colors. Switch themes by changing `data-mo
 
 ```html
 <!-- Dark theme (default) -->
-<div id="reviews-widget" data-mode="dark"></div>
+<div id="google-reviews-widget" data-mode="dark"></div>
 
 <!-- Light theme -->
-<div id="reviews-widget" data-mode="light"></div>
+<div id="google-reviews-widget" data-mode="light"></div>
 ```
 
 Or toggle dynamically:
 ```js
-document.getElementById('reviews-widget').setAttribute('data-mode', 'light');
+document.getElementById('google-reviews-widget').setAttribute('data-mode', 'light');
 ```
 
-CSS variables available in `widget.css`:
+CSS variables available in `google-reviews-widget.css`:
 - `--grw-space`: 8px (base unit)
 - `--grw-bg`: Background color
 - `--grw-text`: Text color
@@ -222,7 +228,7 @@ This project is open source and free to use, modify, and distribute under the MI
 - Check Google Places API is enabled in Cloud Console
 
 **Styling issues in Webflow?**
-- Import `widget.css` only (not `style.css`, which is for the landing page)
+- Import `google-reviews-widget.css` only (not `styles.css`, which is for the landing page)
 - The widget is scoped to `.grw-widget` class, so it won't conflict with Webflow styles
 
 ## 📞 Support

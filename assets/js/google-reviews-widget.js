@@ -1,4 +1,23 @@
+/**
+ * Google Reviews Widget - Standalone JavaScript
+ * Zero dependencies, framework-agnostic, works anywhere.
+ * 
+ * Usage:
+ * <div id="google-reviews-widget"
+ *      data-endpoint="/.netlify/functions/google-reviews"
+ *      data-layout="carousel"
+ *      data-mode="dark"
+ *      data-max="10"
+ *      data-min-rating="4"
+ *      data-autoplay="0"
+ *      data-locale="en">
+ * </div>
+ * <link rel="stylesheet" href="google-reviews-widget.css">
+ * <script src="google-reviews-widget.js" defer></script>
+ */
+
 (() => {
+  // Sample data fallback
   const sample = {
     place: {
       name: "Sample Coffee House",
@@ -18,7 +37,9 @@
     ],
   };
 
+  // Utilities
   const $ = (sel, ctx = document) => ctx.querySelector(sel);
+  
   const createEl = (tag, attrs = {}, children = []) => {
     const el = document.createElement(tag);
     Object.entries(attrs).forEach(([k, v]) => {
@@ -48,6 +69,7 @@
 
   const initials = (name = "?") => name.trim().slice(0, 1).toUpperCase();
 
+  // Review Card with Schema.org microdata
   const reviewCard = (review) => {
     const hasValidPhoto = review.profile_photo_url && review.profile_photo_url.trim().length > 0;
     const avatarAttrs = { class: "avatar", "aria-hidden": "true" };
@@ -104,6 +126,7 @@
     return card;
   };
 
+  // Place Header with Schema.org microdata
   const placeHeader = (place) => {
     if (!place) return null;
     
@@ -133,6 +156,7 @@
     return wrap;
   };
 
+  // Grid Layout
   const renderGrid = (root, place, reviews) => {
     const grid = createEl("div", { class: "review-grid" }, reviews.map(reviewCard));
     root.innerHTML = "";
@@ -141,6 +165,7 @@
     root.appendChild(grid);
   };
 
+  // Carousel Layout with circular scrolling
   const renderCarousel = (root, place, reviews, autoplayMs) => {
     const track = createEl("div", { class: "carousel-track", role: "list" }, reviews.map((r) => createEl("div", { role: "listitem" }, [reviewCard(r)])));
     const prev = createEl("button", { type: "button", class: "carousel-btn prev", "aria-label": "Previous" }, ["◀"]);
@@ -152,10 +177,10 @@
       const maxScroll = track.scrollWidth - track.clientWidth;
       
       if (dir > 0 && track.scrollLeft >= maxScroll - 5) {
-        // Al final, volver al inicio
+        // Loop to beginning
         track.scrollTo({ left: 0, behavior: "smooth" });
       } else if (dir < 0 && track.scrollLeft <= 5) {
-        // Al inicio, ir al final
+        // Loop to end
         track.scrollTo({ left: maxScroll, behavior: "smooth" });
       } else {
         track.scrollBy({ left: dir * delta, behavior: "smooth" });
@@ -172,6 +197,7 @@
     if (header) root.appendChild(header);
     root.appendChild(carousel);
 
+    // Auto-play with pause on hover
     if (autoplayMs > 0) {
       let id = setInterval(scrollByCard(1), autoplayMs);
       carousel.addEventListener("mouseenter", () => clearInterval(id));
@@ -179,6 +205,7 @@
     }
   };
 
+  // Filter reviews
   const format = (data, max, minRating) => {
     const reviews = (data.reviews || [])
       .filter((r) => (r.rating || 0) >= minRating)
@@ -186,6 +213,7 @@
     return { place: data.place, reviews };
   };
 
+  // Fetch reviews from endpoint
   const fetchReviews = async (endpoint, locale) => {
     if (!endpoint) return sample;
     const url = new URL(endpoint, window.location.origin);
@@ -195,6 +223,7 @@
     return res.json();
   };
 
+  // Main render function
   const render = (root) => {
     const opts = getOptions(root);
     const setLoading = (msg) => (root.innerHTML = `<div class="loading">${msg}</div>`);
@@ -218,14 +247,21 @@
       });
   };
 
+  // Initialize widget
   const initWidget = (root) => {
     const mode = root.dataset.mode || "dark";
     root.classList.add("grw-widget", `grw-${mode}`);
     render(root);
   };
 
+  // Auto-initialize on DOMContentLoaded
   document.addEventListener("DOMContentLoaded", () => {
     const widget = $("#google-reviews-widget");
     if (widget) initWidget(widget);
   });
+
+  // Export for manual initialization (optional)
+  if (typeof window !== 'undefined') {
+    window.GoogleReviewsWidget = { initWidget, render };
+  }
 })();
