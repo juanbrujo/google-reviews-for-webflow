@@ -237,6 +237,12 @@
     return res.json();
   };
 
+  // Remove all data-* attributes for security after successful load
+  const removeDataAttrs = (root) => {
+    const dataAttrs = Array.from(root.attributes).filter(attr => attr.name.startsWith('data-'));
+    dataAttrs.forEach(attr => root.removeAttribute(attr.name));
+  };
+
   // Main render function
   const render = (root) => {
     const opts = getOptions(root);
@@ -251,13 +257,21 @@
           setLoading("No reviews available.");
           return;
         }
-        return opts.layout === "grid"
+        const result = opts.layout === "grid"
           ? renderGrid(root, place, reviews)
           : renderCarousel(root, place, reviews, opts.autoplay);
+        
+        // Remove data-* attributes after successful render
+        removeDataAttrs(root);
+        
+        return result;
       })
       .catch(() => {
         const fallback = format(sample, opts.max, opts.minRating);
         opts.layout === "grid" ? renderGrid(root, fallback.place, fallback.reviews) : renderCarousel(root, fallback.place, fallback.reviews, opts.autoplay);
+        
+        // Remove data-* attributes even on fallback (sample data loaded successfully)
+        removeDataAttrs(root);
       });
   };
 
